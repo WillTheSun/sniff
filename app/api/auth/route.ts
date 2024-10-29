@@ -43,6 +43,9 @@ export async function POST(request: Request) {
       if (error) throw error;
       return NextResponse.json({ message: "Password updated successfully" });
     }
+
+    // Add default return for invalid mode
+    return NextResponse.json({ error: "Invalid mode" }, { status: 400 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
