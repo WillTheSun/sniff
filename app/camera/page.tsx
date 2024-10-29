@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '../components/Button';
-import { foodSafetyCheckPrompt } from './prompt';
+import { foodSafetyCheckPrompt, responseFormat } from './prompt';
 export default function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const router = useRouter();
@@ -11,6 +11,8 @@ export default function Camera() {
     const [showOverlay, setShowOverlay] = useState(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isFrozen, setIsFrozen] = useState(false);
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
     useEffect(() => {
         const hasSeenWarning = localStorage.getItem('hasSeenCameraWarning');
@@ -49,49 +51,63 @@ export default function Camera() {
         }
     };
 
+    const analyzeImage = async (imageData: string) => {
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                image: imageData,
+                prompt: foodSafetyCheckPrompt,
+                responseFormat: responseFormat
+            }),
+        });
+
+        return await response.json();
+    };
+
     const capturePhoto = async () => {
         if (!videoRef.current || !canvasRef.current) return;
 
-        setIsLoading(true);
         const video = videoRef.current;
         const canvas = canvasRef.current;
 
-        // Set canvas size to match video dimensions
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
 
-        // Draw the video frame to canvas
         const context = canvas.getContext('2d');
         context?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Convert to base64
         const imageData = canvas.toDataURL('image/jpeg');
+        setCapturedImage(imageData);
+        setIsFrozen(true);
+        setIsLoading(true);
 
         try {
-            const response = await fetch('/api/analyze', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ image: imageData, prompt: foodSafetyCheckPrompt }),
-            });
+            const data = await analyzeImage(imageData);
 
-            const data = await response.json();
-            console.log(data);
-
-            // Store the image data in localStorage temporarily
             localStorage.setItem('analysisImage', imageData);
-            router.push(`/analysis?data=${encodeURIComponent(JSON.stringify(data.result))}`);
+            localStorage.setItem('analysisData', JSON.stringify(data));
+
+            if (video.srcObject instanceof MediaStream) {
+                video.srcObject.getTracks().forEach(async (track) => await track.stop());
+                video.srcObject = null;
+            }
+
+            router.push('/analysis');
         } catch (err) {
             console.error('Error analyzing image:', err);
             setError('Failed to analyze image. Please try again.');
+            setCapturedImage(null);
+            setIsFrozen(false);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="bg-black flex flex-col items-center">
+        <div className="bg-black flex flex-col items-center relative">
             <canvas ref={canvasRef} className="hidden" />
             {error ? (
                 <div className="text-white text-center">
@@ -102,12 +118,25 @@ export default function Camera() {
                 </div>
             ) : (
                 <>
-                    <video
-                        ref={videoRef}
-                        autoPlay
-                        playsInline
-                        className="h-[100dvh] w-auto"
-                    />
+                    {capturedImage ? (
+                        <img
+                            src={capturedImage}
+                            alt="Captured"
+                            className={`h-[100dvh] w-auto object-contain ${isFrozen ? 'brightness-50' : ''}`}
+                        />
+                    ) : (
+                        <video
+                            ref={videoRef}
+                            autoPlay
+                            playsInline
+                            className="h-[100dvh] w-auto"
+                        />
+                    )}
+                    {isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                        </div>
+                    )}
                     {showOverlay && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4">
                             <div className="bg-white rounded-xl p-6 max-w-xs w-full">
@@ -129,17 +158,11 @@ export default function Camera() {
                             Cancel
                         </Button>
                         <button
-                            className="w-16 h-16 rounded-full border-4 border-white bg-white/20 hover:bg-white/30 transition-colors relative"
+                            className="w-16 h-16 rounded-full border-4 border-white bg-white/20 hover:bg-white/30 transition-colors"
                             onClick={capturePhoto}
                             aria-label="Capture photo"
                             disabled={isLoading}
-                        >
-                            {isLoading && (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                                </div>
-                            )}
-                        </button>
+                        />
                     </div>
                 </>
             )}

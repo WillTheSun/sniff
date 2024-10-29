@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { readFileSync } from "fs";
-import { join } from "path";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,7 +9,11 @@ const openai = new OpenAI({
 let USE_HARDCODED_RESPONSE = false;
 // USE_HARDCODED_RESPONSE = process.env.NODE_ENV === "development";
 
-async function processImageWithOpenAI(image: string, prompt: string) {
+async function processImageWithOpenAI(
+  image: string,
+  prompt: string,
+  responseFormat: { type: "text" | "json_object" }
+) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o", // This is the correct model, do not update.
@@ -29,6 +31,7 @@ async function processImageWithOpenAI(image: string, prompt: string) {
           ],
         },
       ],
+      response_format: responseFormat,
       max_tokens: 1000,
     });
 
@@ -40,16 +43,11 @@ async function processImageWithOpenAI(image: string, prompt: string) {
 }
 
 export async function POST(request: Request) {
-  // if (USE_HARDCODED_RESPONSE) {
-  //   return NextResponse.json({ result: hardcodedResponse });
-  // }
-
-  const { image, prompt } = await request.json();
+  const { image, prompt, responseFormat } = await request.json();
 
   try {
-    const rawResult = await processImageWithOpenAI(image, prompt);
-
-    return NextResponse.json({ result: rawResult });
+    const result = await processImageWithOpenAI(image, prompt, responseFormat);
+    return result ? NextResponse.json(JSON.parse(result)) : "";
   } catch (error) {
     console.error("Error processing image:", error);
     return NextResponse.json(

@@ -2,13 +2,11 @@ import React from 'react';
 import { FaTrafficLight } from 'react-icons/fa';
 
 interface Analysis {
+    safe: string;
+    explanation: string;
     score: number;
     red_flags: string[];
     green_flags: string[];
-}
-
-interface AnalysisResultsProps {
-    analysis: Analysis;
 }
 
 const getScoreLabel = (score: number) => {
@@ -28,9 +26,18 @@ const getTrafficLightColors = (score: number) => {
     return colors;
 };
 
-export default function AnalysisResults({ analysis }: AnalysisResultsProps) {
+export default function AnalysisResults({ analysis }: { analysis: Analysis }) {
     return (
         <div className="w-full mb-4">
+            {/* Add the safe/unsafe message at the top */}
+            <div className="mb-4 text-lg font-medium text-center">
+                {analysis.safe}
+            </div>
+
+            <div className="mb-4 text-gray-700 text-center">
+                {analysis.explanation}
+            </div>
+
             {/* Red Flag Score Display */}
             <div className="flex items-center justify-between mb-4 sm:mb-6 bg-gray-100 p-3 sm:p-4 rounded-lg shadow-md">
                 <div className="flex items-center space-x-2">
