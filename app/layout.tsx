@@ -7,8 +7,8 @@ import { OnboardingProvider } from "./context/OnboardingContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "vibe check mate",
-  description: "Date smarter and safer. Find out sus vibes and red flags before you ever meet.",
+  title: "Sniff",
+  description: "Keep your dog safe. Scan food to check if it's safe for your furry friend to eat.",
 };
 
 export default function RootLayout({

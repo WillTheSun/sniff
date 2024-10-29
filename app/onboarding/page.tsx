@@ -97,10 +97,10 @@ function OnboardingSteps() {
                         </button>
                     )}
                     <button
-                        onClick={currentStep === 1 ? completeOnboarding : goToNextStep}
+                        onClick={currentStep === 11 ? completeOnboarding : goToNextStep}
                         className={`flex-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-4`}
                     >
-                        {currentStep === 1 ? 'Start Checking' : 'Continue'}
+                        {currentStep === 11 ? 'Start Checking' : 'Continue'}
                     </button>
                 </div>
             </div>

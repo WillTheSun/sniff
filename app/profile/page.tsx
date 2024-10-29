@@ -4,15 +4,13 @@ import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Button from '../components/Button'
-import { FaArrowLeft } from 'react-icons/fa'
+import { FaArrowLeft, FaSignOutAlt } from 'react-icons/fa'
 import type { OnboardingData } from '../context/OnboardingContext'
 
 export default function Profile() {
     const { data: session, status } = useSession()
     const router = useRouter()
     const [dogData, setDogData] = useState<OnboardingData | null>(null)
-    const [isResetting, setIsResetting] = useState(false)
-    const [newPassword, setNewPassword] = useState('')
 
     useEffect(() => {
         const savedData = localStorage.getItem('dogData')
@@ -22,11 +20,47 @@ export default function Profile() {
     }, [])
 
     const handlePasswordReset = async () => {
-        // TODO: Implement actual password reset
-        console.log('Password reset to:', newPassword)
-        setIsResetting(false)
-        setNewPassword('')
-    }
+        try {
+            if (!session?.user?.email) return;
+
+            const response = await fetch('/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mode: 'requestReset',
+                    email: session.user.email
+                }),
+            });
+
+            if (response.ok) {
+                alert('Check your email for the password reset link');
+            } else {
+                throw new Error('Failed to send reset email');
+            }
+        } catch (error) {
+            console.error('Password reset failed:', error);
+            alert('Failed to initiate password reset');
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mode: 'logout' }),
+            });
+            if (response.ok) {
+                router.push('/');
+            }
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     if (status === 'loading') {
         return <div className="flex min-h-screen items-center justify-center">Loading...</div>
@@ -35,15 +69,25 @@ export default function Profile() {
     return (
         <main className="flex min-h-screen flex-col bg-white">
             <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-                <div className="max-w-6xl mx-auto px-4 py-4 flex items-center">
+                <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                    <div className="flex items-center">
+                        <button
+                            onClick={() => router.push('/home')}
+                            className="mr-4 text-gray-600 hover:text-gray-900"
+                            aria-label="Go back"
+                        >
+                            <FaArrowLeft size={20} />
+                        </button>
+                        <h1 className="text-xl font-bold text-gray-900">Profile</h1>
+                    </div>
                     <button
-                        onClick={() => router.push('/home')}
-                        className="mr-4 text-gray-600 hover:text-gray-900"
-                        aria-label="Go back"
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 border rounded-md"
+                        aria-label="Logout"
                     >
-                        <FaArrowLeft size={20} />
+                        <FaSignOutAlt size={20} />
+                        <span>Logout</span>
                     </button>
-                    <h1 className="text-xl font-bold text-gray-900">Profile</h1>
                 </div>
             </header>
 
@@ -56,43 +100,13 @@ export default function Profile() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <p className="text-gray-900">{session?.user?.email}</p>
                         </div>
-                        {!isResetting ? (
-                            <Button
-                                onClick={() => setIsResetting(true)}
-                                variant="secondary"
-                                className="w-full"
-                            >
-                                Reset Password
-                            </Button>
-                        ) : (
-                            <div className="space-y-4">
-                                <input
-                                    type="password"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    placeholder="New password"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                />
-                                <div className="flex space-x-2">
-                                    <Button
-                                        onClick={() => {
-                                            setIsResetting(false)
-                                            setNewPassword('')
-                                        }}
-                                        variant="secondary"
-                                        className="flex-1"
-                                    >
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        onClick={handlePasswordReset}
-                                        className="flex-1"
-                                    >
-                                        Update
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
+                        <Button
+                            onClick={handlePasswordReset}
+                            variant="secondary"
+                            className="w-full"
+                        >
+                            Reset Password
+                        </Button>
                     </div>
                 </section>
 

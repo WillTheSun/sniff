@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Button from '../components/Button'
-import { FaUser } from 'react-icons/fa'
+import { FaUser, FaSignOutAlt } from 'react-icons/fa'
 
 export default function Home() {
     const { data: session, status } = useSession()
@@ -16,6 +16,23 @@ export default function Home() {
     //     }
     // }, [status, router])
 
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mode: 'logout' }),
+            });
+            if (response.ok) {
+                router.push('/');
+            }
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     if (status === 'loading') {
         return <div className="flex min-h-screen items-center justify-center">Loading...</div>
     }
@@ -25,13 +42,23 @@ export default function Home() {
             <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
                 <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
                     <h1 className="text-xl font-bold text-gray-900">Sniff</h1>
-                    <button
-                        onClick={() => router.push('/profile')}
-                        className="p-2 text-gray-600 hover:text-gray-900"
-                        aria-label="Profile"
-                    >
-                        <FaUser size={24} />
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => router.push('/profile')}
+                            className="p-2 text-gray-600 hover:text-gray-900"
+                            aria-label="Profile"
+                        >
+                            <FaUser size={24} />
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 border rounded-md"
+                            aria-label="Logout"
+                        >
+                            <FaSignOutAlt size={20} />
+                            <span>Logout</span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -40,7 +67,7 @@ export default function Home() {
                     Check if it&apos;s safe for your dog
                 </h2>
                 <p className="text-gray-600 mb-8 text-center max-w-md">
-                    Take a photo of any food or ingredient to instantly check if it's safe for your furry friend
+                    Take a photo of any food or ingredient to instantly check if it&apos;s safe for your furry friend
                 </p>
                 <Button
                     onClick={() => router.push('/camera')}

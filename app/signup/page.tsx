@@ -3,27 +3,47 @@
 import { useState, useEffect } from 'react'
 import Button from '../components/Button'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 
 export default function AuthPage() {
     const searchParams = useSearchParams()
     const [isLogin, setIsLogin] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
     const router = useRouter()
 
     useEffect(() => {
         setIsLogin(searchParams.get('mode') === 'login')
     }, [searchParams])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (isLogin) {
-            // TODO: Implement login logic
-            console.log('Login:', { email, password })
-        } else {
-            // TODO: Implement signup logic
-            console.log('Sign up:', { email, password })
+        setError('')
+
+        try {
+            const response = await fetch('/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    mode: isLogin ? 'login' : 'signup'
+                }),
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Authentication failed')
+            }
+
+            if (data.user) {
+                router.push('/home')
+            }
+        } catch (err: any) {
+            setError(err.message)
         }
     }
 
@@ -40,6 +60,12 @@ export default function AuthPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                    {error && (
+                        <div className="text-red-500 text-sm text-center">
+                            {error}
+                        </div>
+                    )}
+
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -77,22 +103,23 @@ export default function AuthPage() {
                     </Button>
                 </form>
 
+                <div className="text-center text-sm">
+                    <span className="text-gray-600">
+                        {isLogin ? "Don't have an account? " : "Already have an account? "}
+                    </span>
+                    <button
+                        onClick={() => router.push(`/signup?mode=${isLogin ? 'signup' : 'login'}`)}
+                        className="text-blue-600 hover:text-blue-500"
+                    >
+                        {isLogin ? 'Sign up' : 'Log in'}
+                    </button>
+                </div>
+
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300"></div>
                     </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                    </div>
                 </div>
-
-                <Button
-                    onClick={() => signIn('google')}
-                    variant="secondary"
-                    className="w-full"
-                >
-                    Continue with Google
-                </Button>
             </div>
         </main>
     )
