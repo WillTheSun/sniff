@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { foodSafetyCheckPrompt, responseFormat } from './prompt';
 import { ArrowLeftIcon, ImageIcon } from '@radix-ui/react-icons';
+import { useOnboarding } from '../context/OnboardingContext';
 
 export default function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -15,6 +16,7 @@ export default function Camera() {
     const [isFrozen, setIsFrozen] = useState(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
+    const { onboardingData } = useOnboarding();
 
     useEffect(() => {
         const hasSeenWarning = localStorage.getItem('hasSeenCameraWarning');
@@ -95,7 +97,7 @@ export default function Camera() {
             },
             body: JSON.stringify({
                 image: imageData,
-                prompt: foodSafetyCheckPrompt,
+                prompt: foodSafetyCheckPrompt + JSON.stringify(onboardingData),
                 responseFormat: responseFormat
             }),
         });

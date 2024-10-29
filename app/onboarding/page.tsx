@@ -1,6 +1,5 @@
 'use client';
 
-import { OnboardingProvider } from '../context/OnboardingContext';
 import { DogCountStep } from './components/DogCountStep';
 import { DogNameStep } from './components/DogNameStep';
 import { useOnboarding } from '../context/OnboardingContext';
@@ -112,12 +111,10 @@ function OnboardingSteps() {
 
 export default function OnboardingPage() {
     return (
-        <OnboardingProvider>
-            <div className="min-h-screen bg-white">
-                <div className="max-w-md mx-auto pt-8 px-4">
-                    <OnboardingSteps />
-                </div>
+        <div className="min-h-screen bg-white">
+            <div className="max-w-md mx-auto pt-8 px-4">
+                <OnboardingSteps />
             </div>
-        </OnboardingProvider>
+        </div>
     );
 } 
