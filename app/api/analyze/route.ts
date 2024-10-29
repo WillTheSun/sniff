@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 // Declare the constant with a default value
 let USE_HARDCODED_RESPONSE = false;
-USE_HARDCODED_RESPONSE = process.env.NODE_ENV === "development";
+// USE_HARDCODED_RESPONSE = process.env.NODE_ENV === "development";
 
 async function processImageWithOpenAI(image: string, prompt: string) {
   try {
@@ -40,54 +40,16 @@ async function processImageWithOpenAI(image: string, prompt: string) {
 }
 
 export async function POST(request: Request) {
-  if (USE_HARDCODED_RESPONSE) {
-    const hardcodedResponse = {
-      score: "3",
-      red_flags: [
-        "Focus on appearance and materialism: several pictures and text indicate a high focus on looking good and showing off materialistic achievements (ex-Google, high-flying lifestyle)",
-        "Potential misrepresentation: pictures may be overly curated or edited",
-        "Superficiality: mentions luxurious items and experiences frequently (collecting foreign liquors, National Geographic submission, TED Talk)",
-        "Overly idealized expectations: looking for 'an open minded cutie to tie up' might imply unrealistic or overly specific criteria",
-        "Negative or hostile traits: statement about 'tying up' could be interpreted as controlling or manipulative",
-        "Possibly risky behaviors: high focus on nightlife and partying",
-      ],
-      green_flags: [
-        "Adventurous and well-traveled: pictures from various locations indicate an interest in exploring the world",
-        "Educational background: mentions of Yale university and engineering career show intelligence and ambition",
-        "Hobbies and interests: collecting liquors, pottery workshops, and playing volleyball showcase a range of interests",
-      ],
-    };
+  // if (USE_HARDCODED_RESPONSE) {
+  //   return NextResponse.json({ result: hardcodedResponse });
+  // }
 
-    return NextResponse.json({ result: hardcodedResponse });
-  }
-
-  const { image } = await request.json();
-  const prompt = readFileSync(join(process.cwd(), "prompt.txt"), "utf-8");
+  const { image, prompt } = await request.json();
 
   try {
     const rawResult = await processImageWithOpenAI(image, prompt);
-    console.log("Raw result:", rawResult);
 
-    // Extract JSON from the rawResult
-    const jsonMatch = rawResult?.match(/```json\n([\s\S]*?)\n```/);
-    if (!jsonMatch) {
-      throw new Error("No JSON found in the response");
-    }
-
-    const jsonString = jsonMatch[1];
-    const result = JSON.parse(jsonString);
-
-    // Validate the parsed result structure
-    if (
-      !("score" in result) ||
-      !("red_flags" in result) ||
-      !("green_flags" in result)
-    ) {
-      throw new Error("Invalid result structure from OpenAI");
-    }
-
-    console.log("Parsed result:", result);
-    return NextResponse.json({ result: result });
+    return NextResponse.json({ result: rawResult });
   } catch (error) {
     console.error("Error processing image:", error);
     return NextResponse.json(
