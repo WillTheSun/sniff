@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Button from './components/Button';
 import BrandName from './components/BrandName';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { data: session } = useSession()
@@ -29,9 +30,9 @@ export default function Home() {
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 mx-auto">
         <Header isScrolled={isScrolled} session={session} />
         <Content session={session} />
-        <FAQSection />
+        {/* <FAQSection /> */}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }
@@ -42,7 +43,7 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">
-            <BrandName />
+            Sniff
           </h1>
           <nav className="flex space-x-2">
             {session ? (
@@ -67,18 +68,24 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
 }
 
 function Content({ session }: { session: Session | null }) {
+  const router = useRouter();
+
   return (
     <section className="mt-24 text-center flex flex-col items-center justify-center">
       {!session ? (
         <>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Tired of guessing games?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Protect your dog from harmful foods</h2>
           <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
-            Stop wasting your time and energy. find out who they really are, before you pick out your cutest outfit
+            Sniff is your dogs personal food checker.
           </p>
-          <Button onClick={() => signIn('google')} className="py-2 px-6 text-base" useRegularFont>
-            Find out now
+          <Button
+            onClick={() => router.push('/camera')}
+            className="py-2 px-6 text-base"
+            useRegularFont
+          >
+            Scan now
           </Button>
-          <Demo />
+          {/* <Demo /> */}
         </>
       ) : (
         <ProfileAnalyzer />
