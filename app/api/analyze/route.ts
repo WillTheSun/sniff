@@ -42,12 +42,14 @@ async function processImageWithOpenAI(
   }
 }
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   const { image, prompt, responseFormat } = await request.json();
 
   try {
     const result = await processImageWithOpenAI(image, prompt, responseFormat);
-    return result ? NextResponse.json(JSON.parse(result)) : "";
+    return result
+      ? NextResponse.json(JSON.parse(result))
+      : NextResponse.json({});
   } catch (error) {
     console.error("Error processing image:", error);
     return NextResponse.json(
@@ -55,4 +57,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+};
