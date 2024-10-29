@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { CheckIcon } from '@radix-ui/react-icons';
-import { useOnboarding } from '../../context/OnboardingContext';
 
 const TASKS = [
     'Customizing dietary plans',

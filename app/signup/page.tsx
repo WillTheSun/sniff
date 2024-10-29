@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Button from '../components/Button'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function AuthPage() {
+// Create a wrapper component for the search params logic
+function AuthPageContent() {
     const searchParams = useSearchParams()
     const [isLogin, setIsLogin] = useState(false)
     const [email, setEmail] = useState('')
@@ -122,5 +123,14 @@ export default function AuthPage() {
                 </div>
             </div>
         </main>
+    )
+}
+
+// Main component with Suspense boundary
+export default function AuthPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AuthPageContent />
+        </Suspense>
     )
 } 
