@@ -11,7 +11,6 @@ const TASKS = [
 ];
 
 export default function CongratulationsStep() {
-    const { completeOnboarding } = useOnboarding();
     const [completedTasks, setCompletedTasks] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showFinal, setShowFinal] = useState(false);
