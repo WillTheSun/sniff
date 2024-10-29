@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '../components/Button';
 import { foodSafetyCheckPrompt, responseFormat } from './prompt';
+import { ArrowLeftIcon, ImageIcon } from '@radix-ui/react-icons';
+
 export default function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const router = useRouter();
@@ -106,9 +108,64 @@ export default function Camera() {
         }
     };
 
+    const openGallery = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+
+        input.onchange = async (e) => {
+            const file = (e.target as HTMLInputElement).files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const imageData = event.target?.result as string;
+                setCapturedImage(imageData);
+                setIsFrozen(true);
+                setIsLoading(true);
+
+                try {
+                    const data = await analyzeImage(imageData);
+                    localStorage.setItem('analysisImage', imageData);
+                    localStorage.setItem('analysisData', JSON.stringify(data));
+                    router.push('/analysis');
+                } catch (err) {
+                    console.error('Error analyzing image:', err);
+                    setError('Failed to analyze image. Please try again.');
+                    setCapturedImage(null);
+                    setIsFrozen(false);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+
+        input.click();
+    };
+
     return (
         <div className="bg-black flex flex-col items-center relative">
             <canvas ref={canvasRef} className="hidden" />
+            <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 z-10">
+                <button
+                    onClick={() => router.back()}
+                    className="p-2.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                    aria-label="Go back"
+                >
+                    <ArrowLeftIcon className="w-5 h-5 text-white" />
+                </button>
+                <h1 className="text-white text-lg font-medium absolute left-1/2 -translate-x-1/2">
+                    Scan Food
+                </h1>
+                <button
+                    onClick={openGallery}
+                    className="p-2.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                    aria-label="Open gallery"
+                >
+                    <ImageIcon className="w-5 h-5 text-white" />
+                </button>
+            </div>
             {error ? (
                 <div className="text-white text-center">
                     <p className="mb-4">{error}</p>
@@ -153,10 +210,7 @@ export default function Camera() {
                             </div>
                         </div>
                     )}
-                    <div className="absolute bottom-8 flex gap-4">
-                        <Button onClick={() => router.back()} variant="secondary">
-                            Cancel
-                        </Button>
+                    <div className="absolute bottom-8 flex justify-center">
                         <button
                             className="w-16 h-16 rounded-full border-4 border-white bg-white/20 hover:bg-white/30 transition-colors"
                             onClick={capturePhoto}

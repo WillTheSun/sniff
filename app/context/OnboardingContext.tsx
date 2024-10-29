@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-type OnboardingData = {
+export type OnboardingData = {
     numberOfDogs: number;
     dogNames: string[];
     dogDetails: {
