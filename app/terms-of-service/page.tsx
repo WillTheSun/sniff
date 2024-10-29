@@ -18,7 +18,7 @@ const TermsOfService: React.FC = () => {
 
             <section className="mb-6">
                 <h2 className="text-2xl font-semibold mb-3">3. Information Accuracy</h2>
-                <p>While we make every effort to ensure the accuracy of our food safety information, we cannot guarantee that all information is complete or current. The service is provided "as is" without any warranties, and you agree to use it at your own risk.</p>
+                <p>While we make every effort to ensure the accuracy of our food safety information, we cannot guarantee that all information is complete or current. The service is provided &quot;as is&quot; without any warranties, and you agree to use it at your own risk.</p>
             </section>
 
             <section className="mb-6">

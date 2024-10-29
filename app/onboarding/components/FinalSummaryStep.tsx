@@ -8,7 +8,7 @@ export default function FinalSummaryStep() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Great! Here's a summary of your dogs</h2>
+            <h2 className="text-2xl font-semibold">Great! Here&apos;s a summary of your dogs</h2>
             <div className="space-y-8">
                 {dogNames.map((dogName, index) => {
                     const details = dogDetails[index];
