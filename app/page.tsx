@@ -7,7 +7,6 @@ import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Button from './components/Button';
-import BrandName from './components/BrandName';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -46,10 +45,10 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
             Sniff
           </h1>
           <nav className="flex space-x-2">
-            <Button onClick={() => router.push('/signup?mode=login')} variant="secondary">
+            <Button onClick={() => router.push('/signup?mode=login&redirect=/home')} variant="secondary">
               log in
             </Button>
-            <Button onClick={() => router.push('/onboarding')}>
+            <Button onClick={() => router.push('/onboarding?redirect=/home')}>
               sign up
             </Button>
           </nav>
@@ -69,7 +68,7 @@ function Content() {
         Sniff is your dogs personal food checker.
       </p>
       <Button
-        onClick={() => router.push('/onboarding')}
+        onClick={() => router.push('/onboarding?redirect=/home')}
         className="py-2 px-6 text-base"
         useRegularFont
       >

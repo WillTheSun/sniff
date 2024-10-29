@@ -8,37 +8,37 @@ const TermsOfService: React.FC = () => {
 
             <section className="mb-6">
                 <h2 className="text-2xl font-semibold mb-3">1. Acceptance of Terms</h2>
-                <p>By accessing or using vibe check mate, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use our service.</p>
+                <p>By accessing or using Sniff, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use our service.</p>
             </section>
 
             <section className="mb-6">
                 <h2 className="text-2xl font-semibold mb-3">2. Use of Service</h2>
-                <p>You agree to use vibe check mate only for lawful purposes and in a way that does not infringe the rights of, restrict or inhibit anyone else&apos;s use and enjoyment of the service.</p>
+                <p>Sniff is designed to provide information about food safety for dogs. While we strive for accuracy, the service should not replace professional veterinary advice. In case of emergencies or health concerns, always consult your veterinarian.</p>
             </section>
 
             <section className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">3. User Accounts</h2>
-                <p>You are responsible for safeguarding the login methods that you use to access the service and for any activities or actions under your password. You agree not to disclose your password to any third party.</p>
+                <h2 className="text-2xl font-semibold mb-3">3. Information Accuracy</h2>
+                <p>While we make every effort to ensure the accuracy of our food safety information, we cannot guarantee that all information is complete or current. The service is provided "as is" without any warranties, and you agree to use it at your own risk.</p>
             </section>
 
             <section className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">4. Content</h2>
-                <p>Our service allows you to create, link, and share certain information, text, graphics, or other material. You are responsible for the content that you create or share from the service, including its legality, reliability, and appropriateness.</p>
+                <h2 className="text-2xl font-semibold mb-3">4. User Accounts</h2>
+                <p>You are responsible for maintaining the confidentiality of your account and password. You agree to notify us immediately of any unauthorized use of your account.</p>
             </section>
 
             <section className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">5. Termination</h2>
-                <p>We may terminate or suspend access to our service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+                <h2 className="text-2xl font-semibold mb-3">5. Medical Disclaimer</h2>
+                <p>Sniff is not a substitute for professional veterinary care. In case of emergency or if you suspect your dog has consumed something harmful, contact your veterinarian immediately. Do not delay seeking professional medical advice based on information from our service.</p>
             </section>
 
             <section className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">6. Changes</h2>
-                <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. What constitutes a material change will be determined at our sole discretion.</p>
+                <h2 className="text-2xl font-semibold mb-3">6. Changes to Service</h2>
+                <p>We reserve the right to modify, suspend, or discontinue any part of the service at any time. We may also update these terms as needed, and continued use of Sniff after such changes constitutes acceptance of the new terms.</p>
             </section>
 
             <section>
                 <h2 className="text-2xl font-semibold mb-3">7. Contact Us</h2>
-                <p>If you have any questions about these Terms, please contact us at wilsun007@gmail.com.</p>
+                <p>If you have any questions about these Terms, please contact us at support@sniffapp.com.</p>
             </section>
         </div>
     );
