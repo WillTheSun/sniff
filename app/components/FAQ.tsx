@@ -5,44 +5,24 @@ import ReactMarkdown from 'react-markdown';
 const faqData = {
     "faqs": [
         {
-            "question": "what's vibe check mate?",
-            "answer": "**vibe check mate** analyzes your matches to save you time and make dating safer. \n\n### online dating can be full of landmines, like:\n- 😫 cereal killers\n- 🎭 getting catfished\n- 🤔 mismatched intentions\n\n### **vibe check mate** helps you:\n- 🚩 instantly spot red flags\n- 🔍 get insight into their intentions\n- 💡 make more informed decisions before going on a date."
+            "question": "what's sniff?",
+            "answer": "**Sniff** is your dog's personal food safety assistant. \n\n### it helps protect your dog from common food dangers like:\n- 🚫 toxic ingredients\n- 🍫 harmful human foods\n- 🥜 dangerous nuts and seeds\n\n### **Sniff** helps you:\n- 🔍 instantly check if foods are safe\n- ⚡️ get quick answers about ingredients\n- 🐕 make informed decisions about your dog's diet"
         },
         {
             "question": "how does it work?",
-            "answer": "vibe check mate uses advanced ai models to analyze dating profiles. here's how it works:\n\n1. 📸 **upload:** you grab a screenshot of a dating profile\n2. 🧠 **analyze:** our ai processes it in real-time\n3. 📊 **results:** you get a detailed breakdown of potential red and green flags\n\n### what you'll see:\n- 🚩 red flags to watch out for\n- ✅ green flags that look promising\n- 💯 overall compatibility score"
+            "answer": "Sniff makes checking food safety super simple:\n\n1. 📝 **type:** enter any food or ingredient\n2. 🧠 **check:** our system checks against our database\n3. ✨ **results:** get instant safety information\n\n### you'll learn:\n- ✅ if the food is safe\n- ⚠️ potential risks\n- 📋 serving recommendations"
         },
         {
-            "question": "which dating apps work with it?",
-            "answer": "**all of them!** vibe check mate works with any dating app you use. just grab a screenshot and let our ai do its thing."
+            "question": "is the information reliable?",
+            "answer": "**absolutely.** our data comes from:\n\n- veterinary research\n- scientific studies\n- expert veterinarians\n- trusted pet health organizations\n\nwe regularly update our database with the latest pet safety information."
         },
         {
-            "question": "how do i start?",
-            "answer": "it's super simple:\n\n1. sign up\n2. upload a profile screenshot\n3. get a detailed analysis in seconds\n\nboom - you're ready to make smarter dating decisions!"
+            "question": "what if my dog already ate something?",
+            "answer": "if your dog has eaten something potentially harmful:\n\n1. check the food in Sniff\n2. follow any emergency instructions provided\n3. contact your vet if recommended\n\n**remember: in emergencies, always call your vet first!**"
         },
         {
-            "question": "is my data safe?",
-            "answer": "**totally.** we take your privacy seriously:\n\n- we don't store any of your uploads or data\n- everything's processed on the fly\n- once analyzed, it's gone from our servers\n\nyour data's safety is our top priority."
-        },
-        {
-            "question": "can matches see i used this?",
-            "answer": "**nope, it's your little secret.** matches have no clue you're using vibe check mate to scope them out. your dating strategy stays private!"
-        },
-        {
-            "question": "how accurate is it?",
-            "answer": "our ai is designed to be extra sensitive, giving you all the possible flags. here's what you need to know:\n\n- we're working on an accuracy-based version for future updates\n- for now, it's better to have too much info than too little\n- always use your own judgment alongside our insights"
-        },
-        {
-            "question": "is it free? what's in the paid version?",
-            "answer": "* **free for the first 100 sign-ups!**\n* after that, we'll roll out a paid version with cool features like:\n  * custom flags\n  * personalized preferences\n  * deeper analyses\n\nget in early to enjoy all the benefits!"
-        },
-        {
-            "question": "can i set my own red flags?",
-            "answer": "not yet, but it's coming soon! we're working on letting you add your own dealbreakers to the mix. stay tuned for updates!"
-        },
-        {
-            "question": "is this ethical?",
-            "answer": "we believe so, when used responsibly. here's our take:\n\n- vibe check mate gives you all the info to make smart choices\n- ai tools are meant to empower you, not decide for you \n - use your common sense \n\n **remember: always trust your gut**"
+            "question": "is it free?",
+            "answer": "* **free for basic food checks!**\n* premium features coming soon:\n  * detailed nutritional info\n  * personalized portion sizes\n  * breed-specific recommendations\n\nstart protecting your pup for free today!"
         }
     ]
 };

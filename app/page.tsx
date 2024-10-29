@@ -11,8 +11,8 @@ import BrandName from './components/BrandName';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const { data: session } = useSession()
   const [isScrolled, setIsScrolled] = useState(false);
+  const { data: session } = useSession()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,10 +27,10 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-start bg-white">
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 mx-auto">
         <Header isScrolled={isScrolled} session={session} />
-        <Content session={session} />
-        {/* <FAQSection /> */}
+        <Content />
+        <FAQSection />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </main>
   );
 }
@@ -46,20 +46,12 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
             Sniff
           </h1>
           <nav className="flex space-x-2">
-            {session ? (
-              <Button onClick={() => signOut()} variant="secondary">
-                log out
-              </Button>
-            ) : (
-              <>
-                <Button onClick={() => router.push('/signup?mode=login')} variant="secondary">
-                  log in
-                </Button>
-                <Button onClick={() => router.push('/onboarding')}>
-                  sign up
-                </Button>
-              </>
-            )}
+            <Button onClick={() => router.push('/signup?mode=login')} variant="secondary">
+              log in
+            </Button>
+            <Button onClick={() => router.push('/onboarding')}>
+              sign up
+            </Button>
           </nav>
         </div>
       </div>
@@ -67,7 +59,7 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
   );
 }
 
-function Content({ session }: { session: Session | null }) {
+function Content() {
   const router = useRouter();
 
   return (
@@ -76,23 +68,13 @@ function Content({ session }: { session: Session | null }) {
       <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
         Sniff is your dogs personal food checker.
       </p>
-      {!session ? (
-        <Button
-          onClick={() => router.push('/onboarding')}
-          className="py-2 px-6 text-base"
-          useRegularFont
-        >
-          Get Started
-        </Button>
-      ) : (
-        <Button
-          onClick={() => router.push('/camera')}
-          className="py-2 px-6 text-base"
-          useRegularFont
-        >
-          Scan now
-        </Button>
-      )}
+      <Button
+        onClick={() => router.push('/onboarding')}
+        className="py-2 px-6 text-base"
+        useRegularFont
+      >
+        Get Started
+      </Button>
     </section>
   );
 }
@@ -107,19 +89,25 @@ function FAQSection() {
 }
 
 function Footer() {
+  const router = useRouter();
+
   return (
     <footer className="w-full mt-12 mb-8 text-center">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          <BrandName text="vibecheck" /> your date in seconds
+          Keep your dog safe with Sniff
         </h2>
-        <p className="text-lg text-gray-600 mb-6">dont waste time. date smarter and safer today.</p>
-        <Button className="py-2 px-6 mb-8" useRegularFont>
-          <BrandName text="vibecheck" /> for free now
+        <p className="text-lg text-gray-600 mb-6">Check any food or ingredient in seconds to protect your furry friend.</p>
+        <Button
+          onClick={() => router.push('/onboarding')}
+          className="py-2 px-6 mb-8"
+          useRegularFont
+        >
+          Try Sniff for free
         </Button>
         <div className="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0">
           <p className="text-sm text-gray-500 order-2 md:order-1">
-            © 2024 by will sun
+            © 2024 Sniff. All rights reserved.
           </p>
           <p className="text-sm order-1 md:order-2">
             <Link href="/privacy-policy" className="text-blue-600 hover:text-blue-800 hover:underline mr-2">
