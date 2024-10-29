@@ -2,8 +2,6 @@
 
 import { useSession, signIn, signOut } from "next-auth/react"
 import { Session } from "next-auth"
-import ProfileAnalyzer from './components/ProfileAnalyzer';
-import Demo from './components/demo';
 import FAQ from './components/FAQ';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
@@ -38,6 +36,8 @@ export default function Home() {
 }
 
 function Header({ isScrolled, session }: { isScrolled: boolean; session: Session | null }) {
+  const router = useRouter();
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -52,10 +52,10 @@ function Header({ isScrolled, session }: { isScrolled: boolean; session: Session
               </Button>
             ) : (
               <>
-                <Button onClick={() => signIn('google')} variant="secondary">
+                <Button onClick={() => router.push('/signup?mode=login')} variant="secondary">
                   log in
                 </Button>
-                <Button onClick={() => signIn('google')}>
+                <Button onClick={() => router.push('/onboarding')}>
                   sign up
                 </Button>
               </>
@@ -72,23 +72,26 @@ function Content({ session }: { session: Session | null }) {
 
   return (
     <section className="mt-24 text-center flex flex-col items-center justify-center">
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">Protect your dog from harmful foods</h2>
+      <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
+        Sniff is your dogs personal food checker.
+      </p>
       {!session ? (
-        <>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Protect your dog from harmful foods</h2>
-          <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
-            Sniff is your dogs personal food checker.
-          </p>
-          <Button
-            onClick={() => router.push('/camera')}
-            className="py-2 px-6 text-base"
-            useRegularFont
-          >
-            Scan now
-          </Button>
-          {/* <Demo /> */}
-        </>
+        <Button
+          onClick={() => router.push('/onboarding')}
+          className="py-2 px-6 text-base"
+          useRegularFont
+        >
+          Get Started
+        </Button>
       ) : (
-        <ProfileAnalyzer />
+        <Button
+          onClick={() => router.push('/camera')}
+          className="py-2 px-6 text-base"
+          useRegularFont
+        >
+          Scan now
+        </Button>
       )}
     </section>
   );

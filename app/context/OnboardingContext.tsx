@@ -27,7 +27,6 @@ interface OnboardingContextType {
     totalSteps: number;
     getCurrentDogName: () => string;
     updateDogDetail: (dogIndex: number, field: keyof OnboardingData['dogDetails'][number], value: string | string[] | null) => void;
-    completeOnboarding: () => void;
 }
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
@@ -111,10 +110,6 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         }));
     };
 
-    const completeOnboarding = () => {
-        router.push('/');  // Navigate to home page
-    };
-
     return (
         <OnboardingContext.Provider
             value={{
@@ -127,7 +122,6 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
                 totalSteps: 3 + (onboardingData.numberOfDogs * 7) + 1,
                 getCurrentDogName,
                 updateDogDetail,
-                completeOnboarding,
             }}
         >
             {children}

@@ -15,6 +15,7 @@ import AgeStep from './components/AgeStep';
 import NotesStep from './components/NotesStep';
 import FinalSummaryStep from './components/FinalSummaryStep';
 import CongratulationsStep from './components/CongratulationsStep';
+import { useRouter } from 'next/navigation';
 
 function OnboardingSteps() {
     const {
@@ -23,10 +24,14 @@ function OnboardingSteps() {
         totalSteps,
         goToPreviousStep,
         goToNextStep,
-        completeOnboarding
     } = useOnboarding();
+    const router = useRouter();
 
     const progressPercentage = ((currentStep - 1 + (currentDogIndex * 3)) / totalSteps) * 100;
+
+    const completeOnboarding = () => {
+        router.push('/signup');
+    };
 
     return (
         <div className="relative flex flex-col min-h-[80vh] h-full">
@@ -55,7 +60,7 @@ function OnboardingSteps() {
                 {(() => {
                     switch (currentStep) {
                         case 1:
-                            return <CongratulationsStep />;
+                            // return <FinalSummaryStep />;
                             return <DogCountStep />;
                         case 2:
                             return <DogNameStep />;
@@ -93,10 +98,10 @@ function OnboardingSteps() {
                         </button>
                     )}
                     <button
-                        onClick={currentStep === 11 ? completeOnboarding : goToNextStep}
-                        className={`flex-1 "bg-blue-500 hover:bg-blue-600" text-white rounded-full py-3 px-4`}
+                        onClick={currentStep === 1 ? completeOnboarding : goToNextStep}
+                        className={`flex-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-4`}
                     >
-                        {currentStep === 11 ? 'Start Checking' : 'Continue'}
+                        {currentStep === 1 ? 'Start Checking' : 'Continue'}
                     </button>
                 </div>
             </div>
