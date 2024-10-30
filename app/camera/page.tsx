@@ -102,7 +102,17 @@ export default function Camera() {
             }),
         });
 
-        return await response.json();
+        const data = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 429) {
+                localStorage.setItem('analysisError', data.error);
+                throw new Error(data.error);
+            }
+            throw new Error(data.error || 'Failed to analyze image');
+        }
+
+        return data;
     };
 
     const capturePhoto = async () => {

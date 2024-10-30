@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Button from '../components/Button'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Modal from '../components/Modal'
 
 // Create a wrapper component for the search params logic
 function AuthPageContent() {
@@ -12,6 +13,7 @@ function AuthPageContent() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const router = useRouter()
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     useEffect(() => {
         setIsLogin(searchParams.get('mode') === 'login')
@@ -41,7 +43,11 @@ function AuthPageContent() {
             }
 
             if (data.user) {
-                router.push('/home')
+                if (!isLogin) {
+                    setShowConfirmModal(true)
+                } else {
+                    router.push('/home')
+                }
             }
         } catch (err: any) {
             setError(err.message)
@@ -122,6 +128,34 @@ function AuthPageContent() {
                     </div>
                 </div>
             </div>
+
+            {showConfirmModal && (
+                <Modal
+                    isOpen={showConfirmModal}
+                    onClose={() => {
+                        setShowConfirmModal(false)
+                        router.push('/home')
+                    }}
+                >
+                    <div className="p-6 text-center">
+                        <h3 className="mb-4 text-lg font-semibold">Check your email!</h3>
+                        <p className="mb-6 text-gray-600">
+                            We&apos;ve sent a confirmation email to {email}. Please check your inbox and
+                            click the link to verify your account. Until you verify your account, you will
+                            not be able to log in again.
+                        </p>
+                        <Button
+                            onClick={() => {
+                                setShowConfirmModal(false)
+                                router.push('/home')
+                            }}
+                            className="w-full"
+                        >
+                            Got it
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </main>
     )
 }

@@ -45,13 +45,35 @@ async function processImageWithOpenAI(
 export const POST = async (request: Request) => {
   const { image, prompt, responseFormat } = await request.json();
 
+  // return NextResponse.json(
+  //   {
+  //     error:
+  //       "We're experiencing high demand! Too many pet parents are using Sniff right now. Please try again in a few minutes.",
+  //     isRateLimit: true,
+  //   },
+  //   { status: 429 }
+  // );
+
   try {
     const result = await processImageWithOpenAI(image, prompt, responseFormat);
     return result
       ? NextResponse.json(JSON.parse(result))
       : NextResponse.json({});
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error processing image:", error);
+
+    // Check if it's a rate/quota limit error
+    if (error?.response?.status === 429) {
+      return NextResponse.json(
+        {
+          error:
+            "We're experiencing high demand! Too many pet parents are using Sniff right now. Please try again in a few minutes.",
+          isRateLimit: true,
+        },
+        { status: 429 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Error processing image" },
       { status: 500 }
