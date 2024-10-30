@@ -1,41 +1,65 @@
 'use client';
 
-import { useOnboarding } from '../../context/OnboardingContext';
+import { useOnboarding } from '@/app/context/OnboardingContext';
+import { useState } from 'react';
 
 const HEALTH_CONDITIONS = [
-    'Allergies/Intolerances',
-    'Bladder Stones',
+    'Arthritis',
+    'Diabetes',
+    'Heart Disease',
+    'Allergies',
+    'Epilepsy',
     'Cancer',
-    'Colitis',
-    'Chronic Kidney Disease',
-    'Cushing\'s Disease',
-    // Add more conditions as needed
-] as const;
+    'Obesity',
+    'Kidney Disease',
+    'Dental Disease',
+    'Hypothyroidism',
+    'Cushing’s Disease',
+    'Addison’s Disease',
+    'Liver Disease',
+    'Pancreatitis',
+    'Bloat',
+    'Parvovirus',
+    'Distemper',
+    'Lyme Disease',
+    'Rabies',
+    'Kennel Cough',
+    'Fleas',
+    'Ticks',
+    'Worms',
+    'Ear Infections',
+    'Urinary Tract Infections',
+    'Skin Infections',
+    'Eye Infections',
+    'Respiratory Infections',
+    'Gastrointestinal Issues'
+];
 
 export default function HealthConditionsStep() {
-    const { currentDogIndex, updateDogDetail, getCurrentDogName, onboardingData } = useOnboarding();
+    const { currentDogIndex, updateDogDetail, getCurrentDogName } = useOnboarding();
     const dogName = getCurrentDogName();
-    const selectedConditions = onboardingData.dogDetails[currentDogIndex]?.healthConditions || [];
+    const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
 
-    const toggleCondition = (condition: string) => {
-        const newConditions = selectedConditions.includes(condition)
-            ? selectedConditions.filter(c => c !== condition)
-            : [...selectedConditions, condition];
+    const handleConditionToggle = (condition: string) => {
+        setSelectedConditions(prev => {
+            const newConditions = prev.includes(condition)
+                ? prev.filter(c => c !== condition)
+                : [...prev, condition];
 
-        updateDogDetail(currentDogIndex, 'healthConditions', newConditions);
+            // Update the dog's health conditions in context as a comma-separated string
+            updateDogDetail(currentDogIndex, 'healthConditions', newConditions.join(', '));
+            return newConditions;
+        });
     };
 
     return (
         <div className="space-y-4">
             <h2 className="text-xl font-semibold">Does {dogName} have any of these health conditions?</h2>
-            <p className="text-gray-600 text-sm">
-                The most common ones are listed here. If you need one added, email us!
-            </p>
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-[400px] overflow-y-auto">
                 {HEALTH_CONDITIONS.map((condition) => (
                     <button
                         key={condition}
-                        onClick={() => toggleCondition(condition)}
+                        onClick={() => handleConditionToggle(condition)}
                         className={`w-full text-left p-3 rounded-lg border ${selectedConditions.includes(condition)
                             ? 'border-blue-500 bg-blue-50'
                             : 'border-gray-200 hover:border-blue-500'

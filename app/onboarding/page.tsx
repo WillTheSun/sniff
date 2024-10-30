@@ -32,19 +32,25 @@ function OnboardingSteps() {
         router.push('/signup');
     };
 
+    const handleBack = () => {
+        if (currentStep === 1) {
+            router.push('/');
+        } else {
+            goToPreviousStep();
+        }
+    };
+
     return (
         <div className="relative flex flex-col min-h-[80vh] h-full">
             <div className="flex items-center h-10">
-                {currentStep > 1 && (
-                    <button
-                        onClick={goToPreviousStep}
-                        className="p-2 text-gray-600 hover:text-gray-900"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                        </svg>
-                    </button>
-                )}
+                <button
+                    onClick={handleBack}
+                    className="p-2 text-gray-600 hover:text-gray-900"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
                 <Progress.Root
                     className="relative overflow-hidden bg-gray-200 rounded-full w-32 h-1 mx-auto"
                     value={progressPercentage}
@@ -88,14 +94,12 @@ function OnboardingSteps() {
             </div>
             <div className="fixed bottom-4 left-0 right-0 bg-white p-4">
                 <div className="max-w-md mx-auto flex gap-3">
-                    {currentStep > 1 && (
-                        <button
-                            onClick={goToPreviousStep}
-                            className="flex-1 bg-white text-blue-500 border border-blue-500 rounded-full py-3 px-4 hover:bg-blue-50"
-                        >
-                            Back
-                        </button>
-                    )}
+                    <button
+                        onClick={handleBack}
+                        className="flex-1 bg-white text-blue-500 border border-blue-500 rounded-full py-3 px-4 hover:bg-blue-50"
+                    >
+                        Back
+                    </button>
                     <button
                         onClick={currentStep === 11 ? completeOnboarding : goToNextStep}
                         className={`flex-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-4`}

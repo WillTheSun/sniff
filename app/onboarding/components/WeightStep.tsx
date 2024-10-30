@@ -8,6 +8,7 @@ const WEIGHT_RANGES = [
     { label: '21-30 lbs', description: '(Medium/small breeds)' },
     { label: '31-40 lbs', description: '(Medium breeds)' },
     { label: '41-50 lbs', description: '(Medium/large breeds)' },
+    { label: '50+ lbs', description: '(Large breeds)' },
 ];
 
 export default function WeightStep() {
