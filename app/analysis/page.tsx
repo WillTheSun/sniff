@@ -64,7 +64,7 @@ export default function Analysis() {
             {/* Fixed bottom button */}
             <div className="p-4 border-t border-gray-200">
                 <button
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/home')}
                     className="w-full bg-blue-500 text-white py-3 rounded-full"
                 >
                     Done

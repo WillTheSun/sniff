@@ -29,6 +29,7 @@ interface OnboardingContextType {
     totalSteps: number;
     getCurrentDogName: () => string;
     updateDogDetail: (dogIndex: number, field: keyof OnboardingData['dogDetails'][number], value: string | string[] | null) => void;
+    resetOnboardingState: () => void;
 }
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
@@ -112,6 +113,11 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         }));
     };
 
+    const resetOnboardingState = () => {
+        setCurrentStep(1);
+        setCurrentDogIndex(0);
+    };
+
     return (
         <OnboardingContext.Provider
             value={{
@@ -124,6 +130,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
                 totalSteps: 3 + (onboardingData.numberOfDogs * 7) + 1,
                 getCurrentDogName,
                 updateDogDetail,
+                resetOnboardingState,
             }}
         >
             {children}

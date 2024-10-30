@@ -23,12 +23,14 @@ function OnboardingSteps() {
         totalSteps,
         goToPreviousStep,
         goToNextStep,
+        resetOnboardingState,
     } = useOnboarding();
     const router = useRouter();
 
     const progressPercentage = ((currentStep - 1 + (currentDogIndex * 3)) / totalSteps) * 100;
 
     const completeOnboarding = () => {
+        resetOnboardingState();
         router.push('/signup');
     };
 
